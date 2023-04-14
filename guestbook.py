@@ -1,4 +1,4 @@
-import argparse
+import sys
 
 GUESTBOOK_FILE = "guestbook.txt"
 
@@ -14,7 +14,7 @@ def write_guestbook(guestbook):
         f.write("\n".join(guestbook))
 
 def new_note():
-    note = input("Enter your note:" )
+    note = sys.argv[2]
     guestbook.append(note)
     write_guestbook(guestbook)
     print("Note added successfully")
@@ -28,43 +28,45 @@ def list_notes():
 
 def delete_note():
     if not guestbook:
-        print("Gustbook is empty")
+        print("Guestbook is empty")
     else:
         list_notes()
-        index = int(input("Enter the index of the note you want to delete: "))
+        index = int(sys.argv[2])
         try:
             guestbook.pop(index-1)
             write_guestbook(guestbook)
-            print("Note successfully deleted")
-        except IndexError():
-                print("Invalid Index")
+            print("Note deleted successfully")
+        except IndexError:
+            print("Invalid Index")
 
 def edit_note():
     if not guestbook:
         print("Guestbook is empty")
     else:
         list_notes()
-        index = int(input("Enter the index of the note you want to edit: "))
+        index = int(sys.argv[2])
         try:
-            new_note = input("Enter the new note: ")
+            new_note = sys.argv[3]
             guestbook[index-1] = new_note
             write_guestbook(guestbook)
-            print("Note edited successfully")
+            print("Note added successfully")
         except IndexError:
             print("Invalid index")
 
-
-parser = argparse.ArgumentParser(description="Guestbook CLI")
-parser.add_argument('action', choices=['new', 'list', 'delete', 'edit'])
-args = parser.parse_args()
-
 guestbook = read_guestbook()
 
-if args.action == 'new':
+if sys.argv[1] == 'new':
     new_note()
-elif args.action == 'list':
+
+elif sys.argv[1] == 'list':
     list_notes()
-elif args.action == 'delete':
+
+elif sys.argv[1] == 'delete':
     delete_note()
-elif args.action == 'edit':
+
+elif sys.argv[1] == 'edit':
     edit_note()
+
+else:
+    print(f"Invalid command: {sys.argv[1]}")
+    sys.exit(1)
