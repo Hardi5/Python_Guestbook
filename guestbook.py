@@ -46,12 +46,19 @@ def edit_note():
         list_notes()
         index = int(sys.argv[2])
         try:
+            note_index = index - 1
+            if note_index < 0 or note_index >= len(guestbook):
+                print("Invalid text")
+                return
+
+            existing_note = guestbook[note_index]
             new_note = sys.argv[3]
-            guestbook[index-1] = new_note
+            updated_note = f"{existing_note} {new_note}"
+            guestbook[note_index] = updated_note
             write_guestbook(guestbook)
-            print("Note added successfully")
+            print("Note edited successfully")
         except IndexError:
-            print("Invalid index")
+            print("Invalid Index")
 
 guestbook = read_guestbook()
 
